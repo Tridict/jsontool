@@ -110,7 +110,7 @@
         <div><h2>jsontool</h2></div>
       </div>
     </div>
-    <div class="row my-3">
+    <!-- <div class="row my-3">
       <div class="col">
         <ul class="nav nav-tabs">
           <li class="nav-item">
@@ -118,7 +118,7 @@
           </li>
         </ul>
       </div>
-    </div>
+    </div> -->
     <!-- --- -->
     <div class="row my-3" v-if="status.tab==1">
       <form name="file-form-1" class="col">
@@ -130,7 +130,7 @@
       </form>
     </div>
     <!-- --- -->
-    <div class="row my-3" v-if="status.tab==1">
+    <!-- <div class="row my-3" v-if="status.tab==1">
       <form name="file-form-2" class="col">
         <label class="form-label">途径2：请选择 <a target="_blank" href="https://jsonlines.org/"><code>JSON Lines</code></a> 文件并载入。字符编码由 <a class="text-secondary" target="_blank" href="https://github.com/aadsm/jschardet">jschardet</a> 自动识别，如果有误，可手动修改。</label>
         <div class="input-group">
@@ -138,10 +138,19 @@
           <button class="btn btn-primary" type="button" @click="onImportJsonl">📥 载入</button>
         </div>
       </form>
-    </div>
+    </div> -->
     <!-- <div class="row my-3" v-if="status.tab==1">
       <hr />
     </div> -->
+    <!-- --- -->
+    <div class="row my-3" v-if="status.tab==1">
+      <div class="col">
+        <p>载入后，请使用浏览器自带的<a target="_blank" href="https://developer.mozilla.org/zh-CN/docs/Learn/Common_questions/What_are_browser_developer_tools#javascript%E6%8E%A7%E5%88%B6%E5%8F%B0">控制台</a>进行操作。</p>
+        <p>　　<code>app.fs()</code>：列出所有载入的文件。</p>
+        <p>　　<code>app.save(obj)</code>：保存<code>obj</code>到一个名为<code>file.json</code>的文件中。</p>
+        <p>　　请自学 <a target="_blank" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript"><code>JavaScript</code> 相关知识</a> ，尤其是 <a target="_blank" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/filter"><code>filter()</code></a>、<a target="_blank" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map"><code>map()</code></a> 等数组方法。</p>
+      </div>
+    </div>
     <!-- --- -->
     <div class="row my-3" v-if="status.tab==1 && files.length">
       <div class="col-12">
@@ -152,15 +161,15 @@
                 <div class="my-1 col col-2 col-md-1"><button type="button" v-if="fileWrap.isUsable" @click="deleteFile(fileWrap)" class="btn btn-sm btn-close"></button></div>
                 <div class="my-1 col col-10 col-md-6"><span :class="fileWrap.readed?'text-success':''">{{fileWrap.name}}</span></div>
                 <div class="my-1 col col-4 col-md-2">
-                  <input type="text" class="form-control" v-model="fileWrap.encoding">
+                  <input type="text" class="form-control" v-model="fileWrap.encoding" placeholder="字符编码">
                 </div>
                 <div class="my-1 col col-4 col-md-2">
-                  <input type="text" class="form-control" v-model="fileWrap.encoding">
+                  <input type="text" class="form-control" __v-model="fileWrap.encoding" placeholder="此格暂时无用，占位而已">
                   <!-- <select class="form-select" v-model="fileWrap.encoding">
                     <option v-for="ec in encodings" :value="ec">{{ec}}</option>
                   </select> -->
                 </div>
-                <div class="my-1 col col-4 col-md-1"><button type="button" @click="theReader.readFile(fileWrap);" class="btn btn-sm btn-light">▶️</button></div>
+                <div class="my-1 col col-4 col-md-1"><button type="button" @click="theReader.readFile(fileWrap);" class="btn btn-sm btn-light">▶️重载</button></div>
               </div>
             </div>
           </li>
