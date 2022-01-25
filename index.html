@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>jsontool</title>
+  <!-- --- -->
+  <!-- <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.0.0-beta3/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!-- <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.3/css/all.css" rel="stylesheet"> -->
+  <!-- --- -->
+  <link href="./lib/css/bootstrap_5.1.3_.min.css" rel="stylesheet">
+  <!-- <link href="./lib/css/font-awesome-all.css" rel="stylesheet"> -->
+  <!-- --- -->
+  <style type="text/css">
+    :root {
+      --BG: #f8f9fa;
+      --BG-dark: #212529;
+    }
+    * {transition: all 0.25s;}
+
+    html, body {
+      font-size: 14px;
+      background: var(--BG);
+    }
+
+    .app {
+      /*position: relative;*/
+    }
+    .main-wrap {
+      margin: 0 auto;
+      max-width: 96%;
+    }
+
+    .page-cover {
+      position: absolute;
+      top:0; right:0; bottom:0; left:0;
+      overflow: hidden;
+      background: #fff;
+      z-index: 99999;
+    }
+
+    .page {
+      overflow: auto;
+      background: #fff;
+      box-shadow: 0 0 1em #00000022;
+      border-radius: 0.5em;
+    }
+    #page-main {
+    }
+
+    .alert-wrap {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      z-index: 2060;
+      display: none;
+      width: 360px;
+      max-width: 80vw;
+      overflow: hidden;
+      outline: 0;
+    }
+    .hidden-before-ready {
+      display: none;
+    }
+    .hidden-before-ready.ready {
+      display: block;
+    }
+    .hidden-after-ready {
+      display: block;
+    }
+    .hidden-after-ready.ready {
+      display: none;
+    }
+
+    i.fa, i.fas, i.far {min-width: 1.2em;}
+
+    .badge-dot:empty {display: inline-block;}
+    .badge-dot {padding: .35em;}
+  </style>
+</head>
+<body>
+<!-- --- -->
+<div class="app" id="app">
+<!-- --- -->
+
+
+<div class="page-cover" v-if="!ready">
+  <div class="container pt-5 text-center">
+    <div class="row">
+      <div><h2>jsontool</h2></div>
+    </div>
+    <div class="row">
+      <div>
+        <p>正在加载，请稍候……</p>
+        <!-- <p>（需要连接到互联网）</p> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="main-wrap">
+
+<!-- main -->
+<main class="page container my-5 py-4" id="page-main" ref="page_main" key="page_main">
+  <div class="container">
+    <div class="row my-3">
+      <div class="col">
+        <div><h2>jsontool</h2></div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <span class="nav-link" :class="{'active':status.tab==1}" @click="status.tab=1">选择文件<small v-if="files.length">（{{files.length}}）</small></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- --- -->
+    <div class="row my-3" v-if="status.tab==1">
+      <form name="file-form-1" class="col">
+        <label class="form-label">途径1：请选择 <a target="_blank" href="http://www.json.org/json-zh.html"><code>JSON</code></a> 文件并载入。字符编码由 <a class="text-secondary" target="_blank" href="https://github.com/aadsm/jschardet">jschardet</a> 自动识别，如果有误，可手动修改。</label>
+        <div class="input-group">
+          <input class="form-control" type="file" name="file-input-1" id="file-input-1" ref="file_input_1" accept=".json" multiple>
+          <button class="btn btn-primary" type="button" @click="onImportJson">📥 载入</button>
+        </div>
+      </form>
+    </div>
+    <!-- --- -->
+    <div class="row my-3" v-if="status.tab==1">
+      <form name="file-form-2" class="col">
+        <label class="form-label">途径2：请选择 <a target="_blank" href="https://jsonlines.org/"><code>JSON Lines</code></a> 文件并载入。字符编码由 <a class="text-secondary" target="_blank" href="https://github.com/aadsm/jschardet">jschardet</a> 自动识别，如果有误，可手动修改。</label>
+        <div class="input-group">
+          <input class="form-control" type="file" name="file-input-2" id="file-input-2" ref="file_input_2" accept=".jsonl" multiple>
+          <button class="btn btn-primary" type="button" @click="onImportJsonl">📥 载入</button>
+        </div>
+      </form>
+    </div>
+    <!-- <div class="row my-3" v-if="status.tab==1">
+      <hr />
+    </div> -->
+    <!-- --- -->
+    <div class="row my-3" v-if="status.tab==1 && files.length">
+      <div class="col-12">
+        <ul class="list-group">
+          <li class="list-group-item flex-fill" v-for="fileWrap in files">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="my-1 col col-2 col-md-1"><button type="button" v-if="fileWrap.isUsable" @click="deleteFile(fileWrap)" class="btn btn-sm btn-close"></button></div>
+                <div class="my-1 col col-10 col-md-6"><span :class="fileWrap.readed?'text-success':''">{{fileWrap.name}}</span></div>
+                <div class="my-1 col col-4 col-md-2">
+                  <input type="text" class="form-control" v-model="fileWrap.encoding">
+                </div>
+                <div class="my-1 col col-4 col-md-2">
+                  <input type="text" class="form-control" v-model="fileWrap.encoding">
+                  <!-- <select class="form-select" v-model="fileWrap.encoding">
+                    <option v-for="ec in encodings" :value="ec">{{ec}}</option>
+                  </select> -->
+                </div>
+                <div class="my-1 col col-4 col-md-1"><button type="button" @click="theReader.readFile(fileWrap);" class="btn btn-sm btn-light">▶️</button></div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- --- -->
+  </div>
+</main>
+
+
+</div>
+
+
+<!-- Alert -->
+<div class="alert-wrap" style="display: block;" ref="alert_wrap">
+  <transition name = "fade" v-for="alert in theAlert.alerts">
+    <div v-show="alert?.show" class="alert alert-dismissible alert-info" :class="'alert-'+alert?.type">
+      <button type="button" class="btn-close" @click="theAlert.removeAlert(alert?.idx)"></button>
+      <div>{{alert?.content}}</div>
+    </div>
+  </transition>
+</div>
+
+<!-- --- -->
+</div>
+<!-- --- -->
+<!-- <script src="https://cdn.bootcdn.net/ajax/libs/vConsole/3.4.1/vconsole.min.js"></script> -->
+<!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script> -->
+<!-- --- -->
+<script type="text/javascript" src="./lib/js/store_2.0.9_.legacy.min.js"></script>
+<script type="text/javascript" src="./lib/js/FileSaver_2.0.5_.min.js"></script>
+<script type="text/javascript" src="./lib/js/jschardet_3.0.0_.min.js"></script>
+<script type="text/javascript" src="./lib/js/vue_3.2.26_.global.prod.min.js"></script>
+<!-- --- -->
+<script type="text/javascript" src="js/components/BaseAlert.js"></script>
+<script type="text/javascript" src="js/components/BaseStore.js"></script>
+<script type="text/javascript" src="js/components/BaseSaver.js"></script>
+<script type="text/javascript" src="js/components/BaseReader.js"></script>
+<script type="text/javascript" src="js/components/TheReader.js"></script>
+<script type="text/javascript" src="js/util.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
