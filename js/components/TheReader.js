@@ -26,13 +26,14 @@ const TheReader = (handleError=console.log) => {
         .then((reader) => {
           // console.log(reader.result);
           fileWrap.tmp = true;
-          fileWrap.test = reader.result.slice(0, 100);
+          fileWrap.test = reader.result.slice(0, 300);
           return fileWrap;
           // jschardet.detect(the_vue.files[0].buinaryString.slice(0,100));
         })
         .then((fileWrap) => {
           if (encoding==null) {
             encoding = jschardet.detect(fileWrap.test).encoding;
+            encoding = encoding== "ascii" ? "utf-8" : encoding;
           };
           return [encoding, fileWrap];
         })
