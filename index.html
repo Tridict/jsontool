@@ -124,8 +124,18 @@
       <form name="file-form-1" class="col">
         <label class="form-label">途径1：请选择 <a target="_blank" href="http://www.json.org/json-zh.html"><code>JSON</code></a> 文件并载入。字符编码由 <a class="text-secondary" target="_blank" href="https://github.com/aadsm/jschardet">jschardet</a> 自动识别，如果有误，可手动修改。</label>
         <div class="input-group">
-          <input class="form-control" type="file" name="file-input-1" id="file-input-1" ref="file_input_1" accept=".json" multiple>
+          <input class="form-control" type="file" name="file-input-1" id="file-input-1" ref="file_input_1" accept=".json, .txt" multiple>
           <button class="btn btn-primary" type="button" @click="onImportJson">📥 载入</button>
+        </div>
+      </form>
+    </div>
+    <!-- --- -->
+    <div class="row my-3" v-if="status.tab==1">
+      <form name="file-form-2" class="col">
+        <label class="form-label">途径2：请选择 <a target="_blank" href="https://jsonlines.org/"><code>JSON Lines</code></a> 文件并载入。字符编码由 <a class="text-secondary" target="_blank" href="https://github.com/aadsm/jschardet">jschardet</a> 自动识别，如果有误，可手动修改。</label>
+        <div class="input-group">
+          <input class="form-control" type="file" name="file-input-2" id="file-input-2" ref="file_input_2" accept=".json, .jsonl, .txt" multiple>
+          <button class="btn btn-primary" type="button" @click="onImportJsonLines">📥 载入</button>
         </div>
       </form>
     </div>
