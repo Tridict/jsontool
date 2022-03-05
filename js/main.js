@@ -179,8 +179,8 @@ const MainApp = {
       theStore.save();
     });
 
-    const save = (obj) => {
-      theSaver.save(obj);
+    const save = (obj, fileName) => {
+      theSaver.save(obj, fileName);
     };
 
     const fs = () => {
