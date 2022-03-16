@@ -75,10 +75,9 @@ const MainApp = {
 
 
 
-    const onImportJson = () => {
+    const onImport = async (fileList, kind) => {
       let self = data;
       //
-      let fileList = document.forms["file-form-1"]["file-input-1"].files;
       for (let file of fileList) {
         if (self.files.map(f => f.name).includes(file.name)) {
           theAlert.pushAlert(`文件【${file.name}】重复。`)
@@ -92,7 +91,7 @@ const MainApp = {
           fileWrap.tmp = false;
           fileWrap.encodingGot = false;
           fileWrap.encoding = null;
-          fileWrap.kind = "Json";
+          fileWrap.kind = kind;
           self.files.push(fileWrap);
           // self.readFile(file);
         }
@@ -112,39 +111,26 @@ const MainApp = {
 
 
 
-    const onImportJsonLines = () => {
-      let self = data;
-      //
+    const onImportJson = async () => {
+      let fileList = document.forms["file-form-1"]["file-input-1"].files;
+      let result = await onImport(fileList, "Json");
+      return result;
+    };
+
+
+
+    const onImportJsonLines = async () => {
       let fileList = document.forms["file-form-2"]["file-input-2"].files;
-      for (let file of fileList) {
-        if (self.files.map(f => f.name).includes(file.name)) {
-          theAlert.pushAlert(`文件【${file.name}】重复。`)
-        } else {
-          let fileWrap = {};
-          fileWrap.file = file;
-          fileWrap.name = file.name;
-          fileWrap.isUsable = true;
-          fileWrap.readed = false;
-          fileWrap.readed2 = false;
-          fileWrap.tmp = false;
-          fileWrap.encodingGot = false;
-          fileWrap.encoding = null;
-          fileWrap.kind = "JsonLines";
-          self.files.push(fileWrap);
-          // self.readFile(file);
-        }
-      };
-      for (let fileWrap of self.files) {
-        if (!fileWrap.readed) {
-          theReader.readFileAsBinaryString(fileWrap, fileWrap.encoding)
-            .then(() => {
-              theReader.readFile(fileWrap);
-            })
-            .catch((error) => {
-              theAlert.pushAlert(error, 'warning', 5000);
-            });
-        }
-      };
+      let result = await onImport(fileList, "JsonLines");
+      return result;
+    };
+
+
+
+    const onImportTxt = async () => {
+      let fileList = document.forms["file-form-3"]["file-input-3"].files;
+      let result = await onImport(fileList, "PlainText");
+      return result;
     };
 
 
@@ -183,14 +169,19 @@ const MainApp = {
       theSaver.save(obj, fileName);
     };
 
+    const saveText = (obj, fileName) => {
+      theSaver.saveText(obj, fileName);
+    };
+
     const fs = () => {
       return data.files.map(x=>
         x.kind=='Json' ? JSON.parse(x.content):
-        x.kind=='JsonLines' ? (x.content.split(/(\r)?\n(\r)?/).filter(t=>t?.length).map(y=>JSON.parse(y))):
+        x.kind=='JsonLines' ? (x.content.replace(/\r/g, '').split(/\n/).filter(t=>t?.length).map(y=>JSON.parse(y))):
+        x.kind=='PlainText' ? (x.content.replace(/\r/g, '').split(/\n/)):
         x.content);
     };
 
-    return { ...toRefs(data), theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, save, fs };
+    return { ...toRefs(data), theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, onImportTxt, save, saveText, fs };
   },
 };
 
