@@ -166,8 +166,9 @@
     <div class="row my-3" v-if="status.tab==1">
       <div class="col">
         <p>载入后，请使用浏览器自带的<a target="_blank" href="https://developer.mozilla.org/zh-CN/docs/Learn/Common_questions/What_are_browser_developer_tools#javascript%E6%8E%A7%E5%88%B6%E5%8F%B0">控制台</a>进行操作。</p>
-        <p>　　<code>app.fs()</code>：列出所有载入的文件。</p>
-        <p>　　<code>app.save(obj)</code>：保存<code>obj</code>到一个名为<code>file.json</code>的文件中。</p>
+        <p>　　<code>app.fs()</code>：列出所有载入的文件（纯文本文件会被按行分割成字符串数组）。</p>
+        <p>　　<code>app.save(obj[, filename])</code>：保存<code>obj</code>到一个名为 filename 或 <code>file.json</code> 的文件中。</p>
+        <p>　　<code>app.saveText(obj[, filename])</code>：保存<code>obj</code>到一个名为 filename 或 <code>file.txt</code> 的文件中。</p>
         <p>　　请自学 <a target="_blank" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript"><code>JavaScript</code> 相关知识</a> ，尤其是 <a target="_blank" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/filter"><code>filter()</code></a>、<a target="_blank" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map"><code>map()</code></a> 等数组方法。</p>
         <p>　　现已支持 <a target="_blank" href="https://lodash.com/docs"><code>lodash</code></a> 。</p>
       </div>
