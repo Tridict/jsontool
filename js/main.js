@@ -8,6 +8,7 @@ const MainApp = {
       appName: "JsonTool",
       fields: [],
       storeEnabled: true,
+      uuidSting: "",
       //
       "files": [],
       "dic": {},
@@ -31,6 +32,10 @@ const MainApp = {
       "encodings": ["utf-8", "GBK"],
       //
     });
+
+    const makeUuid = () => {data.uuidSting = uuid();};
+
+
     const theStore = reactive(BaseStore(data));
     const theSaver = readonly(BaseSaver(data));
     const theAlert = reactive(BaseAlert());
@@ -181,7 +186,7 @@ const MainApp = {
         x.content);
     };
 
-    return { ...toRefs(data), theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, onImportTxt, save, saveText, fs };
+    return { ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, onImportTxt, save, saveText, fs };
   },
 };
 

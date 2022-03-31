@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>uuidGen</title>
+  <!-- --- -->
+  <!-- <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.0.0-beta3/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!-- <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.3/css/all.css" rel="stylesheet"> -->
+  <!-- --- -->
+  <link href="./lib/css/bootstrap_5.1.3_.min.css" rel="stylesheet">
+  <!-- <link href="./lib/css/font-awesome-all.css" rel="stylesheet"> -->
+  <!-- --- -->
+  <style type="text/css">
+    :root {
+      --BG: #f8f9fa;
+      --BG-dark: #212529;
+    }
+    * {transition: all 0.25s;}
+
+    html, body {
+      font-size: 14px;
+      background: var(--BG);
+    }
+
+    .app {
+      /*position: relative;*/
+    }
+    .main-wrap {
+      margin: 0 auto;
+      max-width: 96%;
+    }
+
+    .page-cover {
+      position: absolute;
+      top:0; right:0; bottom:0; left:0;
+      overflow: hidden;
+      background: #fff;
+      z-index: 99999;
+    }
+
+    .page {
+      overflow: auto;
+      background: #fff;
+      box-shadow: 0 0 1em #00000022;
+      border-radius: 0.5em;
+    }
+    #page-main {
+    }
+
+    .alert-wrap {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      z-index: 2060;
+      display: none;
+      width: 360px;
+      max-width: 80vw;
+      overflow: hidden;
+      outline: 0;
+    }
+    .hidden-before-ready {
+      display: none;
+    }
+    .hidden-before-ready.ready {
+      display: block;
+    }
+    .hidden-after-ready {
+      display: block;
+    }
+    .hidden-after-ready.ready {
+      display: none;
+    }
+
+    i.fa, i.fas, i.far {min-width: 1.2em;}
+
+    .badge-dot:empty {display: inline-block;}
+    .badge-dot {padding: .35em;}
+  </style>
+</head>
+<body>
+<!-- --- -->
+<div class="app" id="app">
+<!-- --- -->
+
+
+<div class="page-cover" v-if="!ready">
+  <div class="container pt-5 text-center">
+    <div class="row">
+      <div><h2>uuidGen</h2></div>
+    </div>
+    <div class="row">
+      <div>
+        <p>正在加载，请稍候……</p>
+        <!-- <p>（需要连接到互联网）</p> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="main-wrap">
+
+<!-- main -->
+<main class="page container my-5 py-4" id="page-main" ref="page_main" key="page_main">
+  <div class="container">
+    <div class="row my-3">
+      <div class="col">
+        <div><h2>uuidGen</h2></div>
+      </div>
+    </div>
+    <!-- --- -->
+    <div class="row my-3">
+      <div class="col">
+        <p>
+          <button
+            type="button"
+            class="btn btn-sm me-2 my-1 btn-outline-primary"
+            @click="makeUuid"
+            title="点击生成uuid"
+          >点击生成uuid</button>
+        </p>
+        <p v-show="uuidSting.length">{{uuidSting}}</p>
+      </div>
+    </div>
+    <!-- --- -->
+  </div>
+</main>
+
+
+</div>
+
+
+<!-- Alert -->
+<div class="alert-wrap" style="display: block;" ref="alert_wrap">
+  <transition name = "fade" v-for="alert in theAlert.alerts">
+    <div v-show="alert?.show" class="alert alert-dismissible alert-info" :class="'alert-'+alert?.type">
+      <button type="button" class="btn-close" @click="theAlert.removeAlert(alert?.idx)"></button>
+      <div>{{alert?.content}}</div>
+    </div>
+  </transition>
+</div>
+
+<!-- --- -->
+</div>
+<!-- --- -->
+<!-- <script src="https://cdn.bootcdn.net/ajax/libs/vConsole/3.4.1/vconsole.min.js"></script> -->
+<!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script> -->
+<!-- --- -->
+<script type="text/javascript" src="./lib/js/lodash_4.17.21_.min.js"></script>
+<script type="text/javascript" src="./lib/js/store_2.0.9_.legacy.min.js"></script>
+<script type="text/javascript" src="./lib/js/FileSaver_2.0.5_.min.js"></script>
+<script type="text/javascript" src="./lib/js/jschardet_3.0.0_.min.js"></script>
+<script type="text/javascript" src="./lib/js/vue_3.2.26_.global.prod.min.js"></script>
+<!-- --- -->
+<script type="text/javascript" src="js/components/BaseAlert.js"></script>
+<script type="text/javascript" src="js/components/BaseStore.js"></script>
+<script type="text/javascript" src="js/components/BaseSaver.js"></script>
+<script type="text/javascript" src="js/components/BaseReader.js"></script>
+<script type="text/javascript" src="js/components/TheReader.js"></script>
+<script type="text/javascript" src="js/util.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
