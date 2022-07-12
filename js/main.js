@@ -189,6 +189,9 @@ const MainApp = {
     const log = console.log;
     const print = console.log;
 
+    window.log = log;
+    window.print = print;
+
     return { ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, onImportTxt, save, saveText, fs, log, print };
   },
 };
