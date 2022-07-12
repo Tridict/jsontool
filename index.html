@@ -134,7 +134,7 @@
       <form name="file-form-2" class="col">
         <label class="form-label">途径2：请选择 <a target="_blank" href="https://jsonlines.org/"><code>JSON Lines</code></a> 文件并载入。字符编码由 <a class="text-secondary" target="_blank" href="https://github.com/aadsm/jschardet">jschardet</a> 自动识别，如果有误，可手动修改。</label>
         <div class="input-group">
-          <input class="form-control" type="file" name="file-input-2" id="file-input-2" ref="file_input_2" accept=".json, .jsonl, .txt" multiple>
+          <input class="form-control" type="file" name="file-input-2" id="file-input-2" ref="file_input_2" accept=".json, .jsonl, .jsonlines, .jsonline, .txt" multiple>
           <button class="btn btn-primary" type="button" @click="onImportJsonLines">📥 载入</button>
         </div>
       </form>
@@ -144,7 +144,7 @@
       <form name="file-form-3" class="col">
         <label class="form-label">途径3：请选择 <code>txt</code> 之类的纯文本文件并载入。字符编码由 <a class="text-secondary" target="_blank" href="https://github.com/aadsm/jschardet">jschardet</a> 自动识别，如果有误，可手动修改。</label>
         <div class="input-group">
-          <input class="form-control" type="file" name="file-input-3" id="file-input-3" ref="file_input_3" accept=".md, .txt" multiple>
+          <input class="form-control" type="file" name="file-input-3" id="file-input-3" ref="file_input_3" accept=".md, .txt, .csv, .tsv" multiple>
           <button class="btn btn-primary" type="button" @click="onImportTxt">📥 载入</button>
         </div>
       </form>

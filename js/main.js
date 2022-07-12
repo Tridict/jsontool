@@ -186,7 +186,9 @@ const MainApp = {
         x.content);
     };
 
-    return { ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, onImportTxt, save, saveText, fs };
+    const log = console.log;
+
+    return { ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, onImportTxt, save, saveText, fs, log };
   },
 };
 
