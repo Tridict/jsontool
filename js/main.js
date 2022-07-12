@@ -187,8 +187,9 @@ const MainApp = {
     };
 
     const log = console.log;
+    const print = console.log;
 
-    return { ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, onImportTxt, save, saveText, fs, log };
+    return { ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, onImportTxt, save, saveText, fs, log, print };
   },
 };
 
