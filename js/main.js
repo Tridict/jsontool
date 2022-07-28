@@ -178,6 +178,10 @@ const MainApp = {
       theSaver.saveText(obj, fileName);
     };
 
+    const saveLines = (obj, fileName) => {
+      theSaver.saveLines(obj, fileName);
+    };
+
     const fs = () => {
       return data.files.map(x=>
         x.kind=='Json' ? JSON.parse(x.content):
@@ -192,9 +196,13 @@ const MainApp = {
     window.log = log;
     window.print = print;
 
-    return { ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, onImportTxt, save, saveText, fs, log, print };
+    return { ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, onImportTxt, save, saveText, saveLines, fs, log, print };
   },
 };
 
 const theApp = Vue.createApp(MainApp);
 const app = theApp.mount('#app');
+const fs = app.fs;
+const save = app.save;
+const saveText = app.saveText;
+const saveLines = app.saveLines;
