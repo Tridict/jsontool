@@ -73,5 +73,18 @@ const uuid = () => {
    return uuid;
 }
 
+const 数列 = (nn, jj=0) => [...Array(nn)].map((it, ix)=>ix+jj);
+
+const 把字符串中的所有子串列出来 = (text) => {
+  const length = text.length;
+  const list = [];
+  for (let nn of 数列(length-1, 1)) {
+    for (let ii of 数列(length+1-nn, 0)) {
+      list.push(text.slice(ii, ii+nn));
+    };
+  };
+  return list;
+};
+
 // 2022-03-14 ↑
 
