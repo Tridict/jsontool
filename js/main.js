@@ -1,5 +1,5 @@
 // import { reactive, readonly, toRefs, computed, onMounted, onUpdated } from 'vue';
-const { reactive, readonly, toRefs, computed, onMounted, onUpdated } = Vue;
+const { reactive, readonly, ref, toRefs, computed, onMounted, onUpdated } = Vue;
 
 const MainApp = {
   setup() {
@@ -80,6 +80,30 @@ const MainApp = {
 
 
 
+    const judgeFileKind = (content) => {
+      let kind = 'PlainText';
+      try {
+        JSON.parse(content);
+        kind = 'Json';
+        return kind;
+      } catch (error) {
+        try {
+          content.replace(/\r/g, '').split(/\n/).filter(t=>t?.length).map(y=>JSON.parse(y));
+          kind = 'JsonLines';
+          return kind;
+        } catch (error) {
+          kind = 'PlainText';
+          return kind;
+        };
+      };
+    }
+
+    const updateFileKind = (file) => {
+      if (file.kind==null||file.kind=="Any") {
+        file.kind = judgeFileKind(file.content);
+      };
+    }
+
     const onImport = async (fileList, kind) => {
       let self = data;
       //
@@ -96,49 +120,42 @@ const MainApp = {
           fileWrap.tmp = false;
           fileWrap.encodingGot = false;
           fileWrap.encoding = null;
-          fileWrap.kind = kind;
+          fileWrap.kind = kind ?? 'Any';
           self.files.push(fileWrap);
           // self.readFile(file);
         }
       };
       for (let fileWrap of self.files) {
         if (!fileWrap.readed) {
-          theReader.readFileAsBinaryString(fileWrap, fileWrap.encoding)
-            .then(() => {
-              theReader.readFile(fileWrap);
-            })
-            .catch((error) => {
-              theAlert.pushAlert(error, 'warning', 5000);
-            });
+          try {
+            theReader.readFileAsBinaryString(fileWrap, fileWrap.encoding);
+            await theReader.readFile(fileWrap);
+            updateFileKind(fileWrap);
+          } catch (error) {
+            theAlert.pushAlert(error, 'warning', 5000);
+          };
         }
       };
     };
 
 
 
-    const onImportJson = async () => {
-      let fileList = document.forms["file-form-1"]["file-input-1"].files;
-      let result = await onImport(fileList, "Json");
+    const onImportAny = async () => {
+      let fileList = document.forms["file-form-0"]["file-input-0"].files;
+      let result = await onImport(fileList);
       return result;
-    };
+    }
 
-
-
-    const onImportJsonLines = async () => {
-      let fileList = document.forms["file-form-2"]["file-input-2"].files;
-      let result = await onImport(fileList, "JsonLines");
+    const onDropFile = async (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+      let fileList = event.dataTransfer.files;
+      let result = await onImport(fileList);
       return result;
-    };
+    }
 
 
-
-    const onImportTxt = async () => {
-      let fileList = document.forms["file-form-3"]["file-input-3"].files;
-      let result = await onImport(fileList, "PlainText");
-      return result;
-    };
-
-
+    const dropArea = ref(null);
     onMounted(() => {
       // alert("mounted");
       data.ready = false;
@@ -164,6 +181,17 @@ const MainApp = {
         console.log(error);
         theAlert.pushAlert(error, 'warning', 5000);
       };
+
+      dropArea.value.addEventListener('dragenter', (event) => {
+        onDropFile(event);
+      });
+      dropArea.value.addEventListener('dragover', (event) => {
+        onDropFile(event);
+      });
+      dropArea.value.addEventListener('drop', (event) => {
+        onDropFile(event);
+      });
+
     });
 
     onUpdated(() => {
@@ -183,11 +211,16 @@ const MainApp = {
     };
 
     const fs = () => {
-      return data.files.map(x=>
-        x.kind=='Json' ? JSON.parse(x.content):
-        x.kind=='JsonLines' ? (x.content.replace(/\r/g, '').split(/\n/).filter(t=>t?.length).map(y=>JSON.parse(y))):
-        x.kind=='PlainText' ? (x.content.replace(/\r/g, '').split(/\n/)):
-        x.content);
+      const result = data.files.map(xx=>{
+        if (xx.kind==null||xx.kind=="Any") {
+          xx.kind = judgeFileKind(xx.content);
+        };
+        return xx.kind=='Json' ? JSON.parse(xx.content):
+        xx.kind=='JsonLines' ? (xx.content.replace(/\r/g, '').split(/\n/).filter(t=>t?.length).map(y=>JSON.parse(y))):
+        xx.kind=='PlainText' ? (xx.content.replace(/\r/g, '').split(/\n/)):
+        xx.content;
+      });
+      return result;
     };
 
     const log = console.log;
@@ -196,7 +229,11 @@ const MainApp = {
     window.log = log;
     window.print = print;
 
-    return { ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile, onImportJson, onImportJsonLines, onImportTxt, save, saveText, saveLines, fs, log, print };
+    return {
+      ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile,
+      onImportAny,
+      save, saveText, saveLines, fs, log, print,
+    };
   },
 };
 
