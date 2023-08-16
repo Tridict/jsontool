@@ -182,13 +182,13 @@ const MainApp = {
         theAlert.pushAlert(error, 'warning', 5000);
       };
 
-      dropArea.value.addEventListener('dragenter', (event) => {
+      dropArea?.value?.addEventListener?.('dragenter', (event) => {
         onDropFile(event);
       });
-      dropArea.value.addEventListener('dragover', (event) => {
+      dropArea?.value?.addEventListener?.('dragover', (event) => {
         onDropFile(event);
       });
-      dropArea.value.addEventListener('drop', (event) => {
+      dropArea?.value?.addEventListener?.('drop', (event) => {
         onDropFile(event);
       });
 
@@ -223,6 +223,14 @@ const MainApp = {
       return result;
     };
 
+    const fileNames = () => {
+      const result = data.files.map(xx=>{
+        return xx.name;
+      });
+      return result;
+    };
+    const filenames = fileNames;
+
     const log = console.log;
     const print = console.log;
 
@@ -233,6 +241,7 @@ const MainApp = {
       ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile,
       onImportAny,
       save, saveText, saveLines, fs, log, print,
+      fileNames, filenames,
     };
   },
 };
@@ -243,3 +252,5 @@ const fs = app.fs;
 const save = app.save;
 const saveText = app.saveText;
 const saveLines = app.saveLines;
+const fileNames = app.fileNames;
+const filenames = app.filenames;
