@@ -6,38 +6,60 @@ const MyBase64 = class MyBase64 {
     // 是为了用两个true分别在首尾来包裹原有的booleans，并在末尾补上合适数量的false，使得booleans的长度是6的倍数
     let myBase64Index = 0;
     let j = 6;
-    let chunk = [];
-    for (let i = 0; i <= (booleans.length+1); i ++) {
+    // let chunk = [];
 
-      if (i==0||i==(booleans.length+1)) {
-        myBase64Index += Math.pow(2, j-1);  // 用两个true分别在首尾来包裹原有的booleans
-        chunk.push(true);
-      } else {
-        myBase64Index += booleans[i-1] ? Math.pow(2, j-1) : 0;
-        chunk.push(booleans[i-1]);
-      }
-
-
+    const oneStep = (bl_)=>{
+      myBase64Index += bl_ ? Math.pow(2, j-1) : 0;
+      // chunk.push(bl_);
       if (j==1) {
-        console.log(myBase64Index, base64Chars[myBase64Index]);
+        // console.log(myBase64Index, base64Chars[myBase64Index]);
         myBase64 += base64Chars[myBase64Index];
         myBase64Index = 0;
         j=7;
-        console.log(`${chunk}`);
-        chunk = [];
+        // // console.log(`${chunk}`);
+        // chunk = [];
       }
       j--;
+    };
+    oneStep(true);  // 开头加一个true
+    for (const bl of booleans) {
+      oneStep(bl);
     }
-    while (j>0) {
-      // myBase64Index += 0;
-      chunk.push(false);
-      j--;
-    }
+    oneStep(true);  // 结尾加一个true
+
+
+    // for (let i = 0; i <= (booleans.length+1); i ++) {
+
+    //   if (i==0||i==(booleans.length+1)) {
+    //     myBase64Index += Math.pow(2, j-1);  // 用两个true分别在首尾来包裹原有的booleans
+    //     // chunk.push(true);
+    //   } else {
+    //     myBase64Index += booleans[i-1] ? Math.pow(2, j-1) : 0;
+    //     // chunk.push(booleans[i-1]);
+    //   }
+
+
+    //   if (j==1) {
+    //     // console.log(myBase64Index, base64Chars[myBase64Index]);
+    //     myBase64 += base64Chars[myBase64Index];
+    //     myBase64Index = 0;
+    //     j=7;
+    //     // // console.log(`${chunk}`);
+    //     // chunk = [];
+    //   }
+    //   j--;
+    // }
+
+    // while (j>0) {
+    //   // myBase64Index += 0;
+    //   // chunk.push(false);
+    //   j--;
+    // }
     if (myBase64Index>0) {
-      console.log(myBase64Index, base64Chars[myBase64Index]);
+      // console.log(myBase64Index, base64Chars[myBase64Index]);
       myBase64 += base64Chars[myBase64Index];
-      console.log(`${chunk}`);
-      chunk = [];
+      // // console.log(`${chunk}`);
+      // chunk = [];
     }
     return myBase64;
   }
@@ -46,12 +68,12 @@ const MyBase64 = class MyBase64 {
     let chunk = [];
     for (let i = 0; i < myBase64.length; i++) {
       let myBase64Rest = base64Chars.indexOf(myBase64[i]);
-      console.log(myBase64[i], myBase64Rest);
+      // console.log(myBase64[i], myBase64Rest);
       for (let j = 1; j <= 6; j++) {
         chunk.push(myBase64Rest % 2 == 1);
         myBase64Rest = Math.floor(myBase64Rest / 2);
       }
-      console.log(`${chunk}`);
+      // console.log(`${chunk}`);
       booleans.push(...chunk.reverse());
       chunk = [];
     }
