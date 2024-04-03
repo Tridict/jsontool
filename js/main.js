@@ -206,6 +206,10 @@ const MainApp = {
       theSaver.saveText(obj, fileName);
     };
 
+    const saveJson5 = (obj, fileName) => {
+      theSaver.saveJson5(obj, fileName);
+    };
+
     const saveLines = (obj, fileName) => {
       theSaver.saveLines(obj, fileName);
     };
@@ -240,7 +244,7 @@ const MainApp = {
     return {
       ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile,
       onImportAny,
-      save, saveText, saveLines, fs, log, print,
+      save, saveText, saveJson5, saveLines, fs, log, print,
       fileNames, filenames,
     };
   },
@@ -251,6 +255,7 @@ const app = theApp.mount('#app');
 const fs = app.fs;
 const save = app.save;
 const saveText = app.saveText;
+const saveJson5 = app.saveJson5;
 const saveLines = app.saveLines;
 const fileNames = app.fileNames;
 const filenames = app.filenames;

@@ -11,6 +11,12 @@ const BaseSaver = () => {
       let file = new File([text], fileName, {type: "text/plain;charset=utf-8"});
       saveAs(file);
     },
+    saveJson5(obj, fileName) {
+      fileName = (!fileName?.length) ? "file.json5" : ((fileName?.split?.(".")?.length??0)<2) ? `${fileName}.json5` : fileName;
+      let text = JSON5.stringify(obj, null, 2)
+      let file = new File([text], fileName, {type: "text/plain;charset=utf-8"});
+      saveAs(file);
+    },
     saveLines(list, fileName) {
       if (list?.map==null) {list = [list]};
       fileName = (!fileName?.length) ? "file.jsonl" : ((fileName?.split?.(".")?.length??0)<2) ? `${fileName}.jsonl` : fileName;
