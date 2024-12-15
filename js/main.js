@@ -241,6 +241,22 @@ const MainApp = {
     window.log = log;
     window.print = print;
 
+    window.JsTool = {
+      __KV__: {},
+      __History__: [],
+      log(xxx) {
+        const ttt = JSON.stringify(xxx);
+        this.__History__.push(ttt);
+        console.log(ttt);
+      },
+      clear() {
+        this.__KV__ = {};
+        this.__History__ = [];
+      },
+      set(kk, vv) { this.__KV__[kk] = vv; },
+      get(kk) { return this.__KV__[kk]; },
+    };
+
     return {
       ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile,
       onImportAny,
