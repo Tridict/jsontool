@@ -241,7 +241,7 @@ const MainApp = {
     window.log = log;
     window.print = print;
 
-    window.JsTool = {
+    const JsTool = {
       __KV__: {},
       __History__: [],
       log(xxx) {
@@ -255,7 +255,21 @@ const MainApp = {
       },
       set(kk, vv) { this.__KV__[kk] = vv; },
       get(kk) { return this.__KV__[kk]; },
+      last() { return this.__History__[this.__History__.length - 1]; },
     };
+    window.JsTool = JsTool;
+    const runCode = (code) => {
+      code = code.replace(/^【JsTool call】/g, '');
+      code = code.replace(/【JsTool end】$/g, '');
+      code = code.trim();
+      try {
+        eval(code);
+      } catch (error) {
+        JsTool.log(error);
+      }
+      return JsTool.last();
+    };
+    window.runCode = runCode;
 
     return {
       ...toRefs(data), makeUuid, theAlert, theStore, theSaver, theReader, deleteFile,
